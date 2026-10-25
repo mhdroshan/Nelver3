@@ -1,0 +1,796 @@
+/* ==========================================================================
+   NELVÉR III — Atelier Haute Couture
+   Edition III Editorial Design System
+   Primary Brand Color: #082567
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Design Tokens & CSS Variables
+   -------------------------------------------------------------------------- */
+:root {
+  /* Brand Palette — Centered around #082567 */
+  --color-primary: #082567;
+  --color-primary-rgb: 8, 37, 103;
+  --color-primary-dark: #04143a;
+  --color-primary-light: #0d389c;
+  --color-primary-soft: rgba(8, 37, 103, 0.05);
+  --color-primary-medium: rgba(8, 37, 103, 0.1);
+  --color-primary-glow: rgba(8, 37, 103, 0.16);
+
+  /* Surface & Canvas */
+  --color-canvas-bg: #faf9f6;
+  --color-surface-white: #ffffff;
+  --color-card-bg: rgba(255, 255, 255, 0.9);
+  --color-card-solid: #ffffff;
+
+  /* Borders & Dividers */
+  --color-border-hairline: rgba(8, 37, 103, 0.1);
+  --color-border-card: rgba(8, 37, 103, 0.14);
+  --color-border-active: #082567;
+  --color-divider: rgba(8, 37, 103, 0.08);
+
+  /* Typography Colors */
+  --color-text-hero: #082567;
+  --color-text-quote: #132c66;
+  --color-text-body: #334155;
+  --color-text-muted: #64748b;
+  --color-text-light: #94a3b8;
+  --color-text-white: #ffffff;
+
+  /* Accents */
+  --color-status-green: #059669;
+  --color-status-green-glow: rgba(5, 150, 105, 0.25);
+
+  /* Typography Stacks */
+  --font-serif-headline: 'Bodoni Moda', 'Playfair Display', Georgia, serif;
+  --font-serif-italic: 'Cormorant Garamond', Georgia, serif;
+  --font-sans-precision: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-tech-mono: 'Space Grotesk', -apple-system, Consolas, monospace;
+
+  /* Transitions */
+  --ease-atelier: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 0.18s;
+  --duration-normal: 0.3s;
+  --duration-slow: 0.6s;
+}
+
+/* --------------------------------------------------------------------------
+   Reset & Baseline
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  color-scheme: light;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--color-canvas-bg);
+  color: var(--color-text-body);
+  font-family: var(--font-sans-precision);
+  line-height: 1.6;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* --------------------------------------------------------------------------
+   Ambient Architectural Background Atmosphere
+   -------------------------------------------------------------------------- */
+.canvas-background {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.canvas-background::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 50% 38%,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(251, 250, 248, 0.88) 55%,
+    rgba(247, 245, 240, 0.95) 100%
+  );
+  z-index: 1;
+}
+
+.canvas-texture {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  opacity: 0.02;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+.architectural-rings-svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1400px;
+  height: 1400px;
+  max-width: 145vw;
+  max-height: 145vw;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.85;
+  transition: transform 1.2s var(--ease-atelier);
+}
+
+.architectural-rings-svg circle {
+  stroke: var(--color-primary);
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+/* --------------------------------------------------------------------------
+   Page Container Framework (Minimal Focused Column)
+   -------------------------------------------------------------------------- */
+.page-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding: 2.5rem 2rem 2.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* --------------------------------------------------------------------------
+   Top Navigation Header
+   -------------------------------------------------------------------------- */
+.top-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-bottom: 2.5rem;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.brand-logo-img {
+  width: 28px;
+  height: 26px;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+  filter: brightness(0) saturate(100%) invert(11%) sepia(91%) saturate(3004%) hue-rotate(216deg) brightness(91%) contrast(105%);
+  transition: transform var(--duration-fast) var(--ease-atelier);
+}
+
+.nav-brand:hover .brand-logo-img {
+  transform: scale(1.06);
+}
+
+.nav-brand-title {
+  font-family: var(--font-sans-precision);
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.22em;
+  color: var(--color-primary);
+  text-transform: uppercase;
+}
+
+.nav-divider {
+  color: rgba(8, 37, 103, 0.25);
+  font-weight: 300;
+  margin: 0 0.5rem;
+}
+
+.nav-subtitle {
+  font-family: var(--font-sans-precision);
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.nav-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-tech-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  color: var(--color-primary);
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.status-live-dot {
+  width: 6px;
+  height: 6px;
+  background-color: var(--color-status-green);
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--color-status-green-glow);
+  display: inline-block;
+  animation: pulseGreen 2.4s infinite var(--ease-atelier);
+}
+
+@keyframes pulseGreen {
+  0%, 100% {
+    box-shadow: 0 0 0 2px var(--color-status-green-glow);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(5, 150, 105, 0.12);
+    transform: scale(1.1);
+  }
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.nav-contact-link {
+  font-family: var(--font-sans-precision);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--color-primary);
+  text-decoration: none;
+  text-transform: uppercase;
+  padding: 0.38rem 0.65rem;
+  border-radius: 2px;
+  transition: all var(--duration-fast) var(--ease-atelier);
+}
+
+.nav-contact-link:hover {
+  background: var(--color-primary-soft);
+  color: var(--color-primary-dark);
+}
+
+/* --------------------------------------------------------------------------
+   Minimal Editorial Main Stage
+   -------------------------------------------------------------------------- */
+.minimal-editorial {
+  display: flex;
+  flex-direction: column;
+  padding: 4.5rem 0 4rem;
+  max-width: 840px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Monogram & Edition Lockup */
+.brand-monogram-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+.monogram-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--color-surface-white);
+  border: 1px solid var(--color-border-card);
+  padding: 0.45rem 0.95rem 0.45rem 0.65rem;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(8, 37, 103, 0.03);
+}
+
+.monogram-logo-img {
+  width: 22px;
+  height: 20px;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+  filter: brightness(0) saturate(100%) invert(11%) sepia(91%) saturate(3004%) hue-rotate(216deg) brightness(91%) contrast(105%);
+}
+
+.monogram-edition {
+  font-family: var(--font-tech-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: var(--color-primary);
+  text-transform: uppercase;
+}
+
+.codex-bar-divider {
+  width: 1px;
+  height: 24px;
+  background-color: rgba(8, 37, 103, 0.18);
+}
+
+.brand-spec-stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.spec-kicker {
+  font-family: var(--font-sans-precision);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--color-primary);
+  text-transform: uppercase;
+}
+
+.spec-title {
+  font-family: var(--font-sans-precision);
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
+/* Hero Statement & Manifesto */
+.hero-block {
+  margin-bottom: 3.5rem;
+}
+
+.hero-statement {
+  font-family: var(--font-serif-headline);
+  font-size: clamp(3.4rem, 5.5vw, 5rem);
+  font-weight: 600;
+  color: var(--color-primary);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.35rem;
+  text-transform: none;
+}
+
+.hero-quote {
+  font-family: var(--font-serif-italic);
+  font-style: italic;
+  font-size: clamp(1.4rem, 2vw, 1.8rem);
+  font-weight: 400;
+  line-height: 1.45;
+  color: var(--color-text-quote);
+  max-width: 740px;
+  margin-bottom: 1.45rem;
+}
+
+.hero-description {
+  font-family: var(--font-sans-precision);
+  font-size: 1.02rem;
+  line-height: 1.75;
+  color: var(--color-text-body);
+  max-width: 680px;
+}
+
+/* --------------------------------------------------------------------------
+   3 Minimal E-Commerce Feature Pillars
+   -------------------------------------------------------------------------- */
+.ecommerce-pillars {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.pillar-card {
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid var(--color-border-card);
+  padding: 1.65rem 1.65rem 1.85rem;
+  border-radius: 2px;
+  transition: all var(--duration-fast) var(--ease-atelier);
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.pillar-card:hover {
+  background: var(--color-surface-white);
+  border-color: rgba(8, 37, 103, 0.3);
+  box-shadow: 0 8px 24px rgba(8, 37, 103, 0.06);
+  transform: translateY(-2px);
+}
+
+.pillar-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.85rem;
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.pillar-num {
+  font-family: var(--font-tech-mono);
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: 0.1em;
+}
+
+.pillar-title {
+  font-family: var(--font-sans-precision);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--color-primary);
+  text-transform: uppercase;
+}
+
+.pillar-desc {
+  font-family: var(--font-sans-precision);
+  font-size: 0.82rem;
+  color: var(--color-text-body);
+  line-height: 1.6;
+}
+
+/* --------------------------------------------------------------------------
+   Direct Atelier Client Liaison Strip
+   -------------------------------------------------------------------------- */
+.liaison-strip {
+  margin-top: 2rem;
+  background: var(--color-surface-white);
+  border: 1px solid var(--color-border-card);
+  border-radius: 3px;
+  padding: 1.15rem 1.65rem;
+  box-shadow: 0 4px 16px rgba(8, 37, 103, 0.03);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.liaison-strip-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.liaison-status-group {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.liaison-status-text {
+  font-family: var(--font-sans-precision);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--color-primary);
+  text-transform: uppercase;
+}
+
+.liaison-links {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.liaison-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-sans-precision);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--color-primary);
+  text-decoration: none;
+  text-transform: uppercase;
+  padding: 0.45rem 0.95rem;
+  border-radius: 2px;
+  border: 1px solid rgba(8, 37, 103, 0.16);
+  background: var(--color-primary-soft);
+  transition: all var(--duration-fast) var(--ease-atelier);
+}
+
+.liaison-link:hover {
+  background: var(--color-primary);
+  color: var(--color-text-white);
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 14px rgba(8, 37, 103, 0.18);
+  transform: translateY(-1px);
+}
+
+.liaison-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.footer-pipe {
+  margin: 0 0.65rem;
+  color: #94a3b8;
+}
+
+/* --------------------------------------------------------------------------
+   Site Bottom Footer Bar
+   -------------------------------------------------------------------------- */
+.bottom-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 2rem;
+  border-top: 1px solid var(--color-divider);
+  font-family: var(--font-sans-precision);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+}
+
+.footer-copy {
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.footer-bullet {
+  margin: 0 0.75rem;
+  color: #94a3b8;
+}
+
+.footer-ecom-label {
+  font-family: var(--font-tech-mono);
+  font-size: 0.65rem;
+  color: var(--color-text-muted);
+  letter-spacing: 0.16em;
+}
+
+.footer-center {
+  display: flex;
+  align-items: center;
+}
+
+.footer-action-link {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 600;
+  letter-spacing: inherit;
+  color: var(--color-text-body);
+  text-decoration: none;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: color var(--duration-fast);
+  padding: 0.2rem 0.4rem;
+}
+
+.footer-action-link:hover {
+  color: var(--color-primary);
+}
+
+.footer-right {
+  display: flex;
+  align-items: center;
+}
+
+.ambience-control-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-body);
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 600;
+  letter-spacing: inherit;
+  text-transform: uppercase;
+  transition: color var(--duration-fast);
+  padding: 0.2rem 0.4rem;
+}
+
+.ambience-control-btn:hover {
+  color: var(--color-primary);
+}
+
+.audio-speaker-icon {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  color: var(--color-primary);
+  transition: transform var(--duration-fast);
+}
+
+.ambience-control-btn.playing .audio-speaker-icon {
+  animation: pulseSpeaker 1.6s infinite ease-in-out;
+}
+
+@keyframes pulseSpeaker {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+/* --------------------------------------------------------------------------
+   Haute Couture Mouse-Following Animation System
+   -------------------------------------------------------------------------- */
+.custom-cursor-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  background-color: var(--color-primary);
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease, background-color 0.25s ease, transform 0.15s ease;
+  z-index: 10001;
+  opacity: 0;
+}
+
+.cursor-follower {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(8, 37, 103, 0.35);
+  background: rgba(8, 37, 103, 0.02);
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: width 0.35s var(--ease-atelier),
+              height 0.35s var(--ease-atelier),
+              border-color 0.35s var(--ease-atelier),
+              background 0.35s var(--ease-atelier),
+              box-shadow 0.35s var(--ease-atelier),
+              opacity 0.3s ease,
+              transform 0.12s ease;
+  z-index: 10000;
+  opacity: 0;
+  backdrop-filter: blur(0.5px);
+  -webkit-backdrop-filter: blur(0.5px);
+}
+
+/* Ambient Radial Torch Following Spotlight in Background */
+.cursor-ambient-spotlight {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 650px;
+  height: 650px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(8, 37, 103, 0.04) 0%,
+    rgba(8, 37, 103, 0.01) 45%,
+    transparent 70%
+  );
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+/* Cursor Interactive States */
+.cursor-follower.is-hovering {
+  width: 52px;
+  height: 52px;
+  border-color: rgba(8, 37, 103, 0.6);
+  background: rgba(8, 37, 103, 0.06);
+  box-shadow: 0 0 16px rgba(8, 37, 103, 0.1);
+}
+
+.cursor-dot.is-hovering {
+  transform: translate(-50%, -50%) scale(1.3);
+  background-color: var(--color-primary-dark);
+}
+
+.cursor-follower.is-clicking {
+  transform: translate(-50%, -50%) scale(0.85);
+  border-color: var(--color-primary);
+  background: rgba(8, 37, 103, 0.15);
+}
+
+/* --------------------------------------------------------------------------
+   Responsive Layout Adaptations
+   -------------------------------------------------------------------------- */
+@media (max-width: 820px) {
+  .page-container {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .top-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .nav-status {
+    font-size: 0.62rem;
+  }
+
+  .minimal-editorial {
+    padding: 2.5rem 0 2.5rem;
+  }
+
+  .hero-statement {
+    font-size: 2.75rem;
+  }
+
+  .hero-quote {
+    font-size: 1.25rem;
+  }
+
+  .ecommerce-pillars {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .bottom-footer {
+    flex-direction: column;
+    gap: 1.25rem;
+    text-align: center;
+    padding-top: 1.75rem;
+  }
+
+  .footer-left,
+  .footer-center,
+  .footer-right {
+    justify-content: center;
+  }
+}
+
+@media (pointer: coarse) {
+  .custom-cursor-container,
+  .cursor-ambient-spotlight {
+    display: none !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Accessibility & Reduced Motion
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .custom-cursor-container,
+  .cursor-ambient-spotlight {
+    display: none !important;
+  }
+}
