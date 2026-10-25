@@ -587,44 +587,6 @@ body {
   align-items: center;
 }
 
-.ambience-control-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--color-text-body);
-  font-family: inherit;
-  font-size: inherit;
-  font-weight: 600;
-  letter-spacing: inherit;
-  text-transform: uppercase;
-  transition: color var(--duration-fast);
-  padding: 0.2rem 0.4rem;
-}
-
-.ambience-control-btn:hover {
-  color: var(--color-primary);
-}
-
-.audio-speaker-icon {
-  width: 15px;
-  height: 15px;
-  flex-shrink: 0;
-  color: var(--color-primary);
-  transition: transform var(--duration-fast);
-}
-
-.ambience-control-btn.playing .audio-speaker-icon {
-  animation: pulseSpeaker 1.6s infinite ease-in-out;
-}
-
-@keyframes pulseSpeaker {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.15); }
-}
-
 /* --------------------------------------------------------------------------
    Haute Couture Mouse-Following Animation System
    -------------------------------------------------------------------------- */

@@ -1,14 +1,13 @@
 /**
  * NELVÉR III — Atelier Haute Couture
  * Minimal Clean E-Commerce Interaction System
- * Features: Background Parallax, Bespoke Cursor, 3D Micro-Perspective Tilt & 432 Hz Ambient Audio Drone
+ * Features: Background Parallax, Bespoke Cursor, 3D Micro-Perspective Tilt
  */
 
 document.addEventListener('DOMContentLoaded', () => {
   initBackgroundMotion();
   initMouseFollower();
   initCardTilt();
-  initSalonAmbience();
 });
 
 /**
@@ -101,7 +100,7 @@ function initMouseFollower() {
   });
 
   // Dynamic hover detection for interactive elements
-  const interactiveSelectors = 'a, button, .pillar-card, .nav-contact-link, .liaison-link, .ambience-control-btn, .footer-action-link';
+  const interactiveSelectors = 'a, button, .pillar-card, .nav-contact-link, .liaison-link, .footer-action-link';
   
   document.addEventListener('mouseover', (e) => {
     if (e.target.closest(interactiveSelectors)) {
@@ -177,99 +176,5 @@ function initCardTilt() {
     card.addEventListener('mouseleave', () => {
       card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
     });
-  });
-}
-
-/**
- * Salon Ambience (432 Hz Pure Drone Audio Synthesizer)
- * Created using native Web Audio API with zero external dependencies
- */
-function initSalonAmbience() {
-  const ambienceBtn = document.getElementById('ambienceBtn');
-  const ambienceState = document.getElementById('ambienceState');
-  if (!ambienceBtn) return;
-
-  let audioCtx = null;
-  let masterGain = null;
-  let isPlaying = false;
-  let oscNodes = [];
-
-  function startAmbience() {
-    try {
-      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-      audioCtx = new AudioContextClass();
-
-      // Master Gain with gentle fade-in
-      masterGain = audioCtx.createGain();
-      masterGain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
-      masterGain.gain.exponentialRampToValueAtTime(0.12, audioCtx.currentTime + 2.5);
-
-      // Low Pass Filter for gentle warmth
-      const filter = audioCtx.createBiquadFilter();
-      filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(1100, audioCtx.currentTime);
-
-      masterGain.connect(filter);
-      filter.connect(audioCtx.destination);
-
-      // Fundamental 432 Hz frequency harmonics
-      const f0 = 432;
-      const frequencies = [
-        { freq: f0 / 2, type: 'sine', gain: 0.08 },
-        { freq: f0, type: 'sine', gain: 0.12 },
-        { freq: f0 * 1.5, type: 'sine', gain: 0.04 },
-        { freq: f0 * 2, type: 'sine', gain: 0.02 }
-      ];
-
-      oscNodes = frequencies.map(cfg => {
-        const osc = audioCtx.createOscillator();
-        const oscGain = audioCtx.createGain();
-        osc.type = cfg.type;
-        osc.frequency.setValueAtTime(cfg.freq, audioCtx.currentTime);
-        oscGain.gain.setValueAtTime(cfg.gain, audioCtx.currentTime);
-
-        osc.connect(oscGain);
-        oscGain.connect(masterGain);
-        osc.start();
-        return osc;
-      });
-
-      isPlaying = true;
-      ambienceBtn.classList.add('playing');
-      if (ambienceState) ambienceState.textContent = '432 HZ (ACTIVE)';
-    } catch (e) {
-      console.warn('Web Audio ambience not available:', e);
-    }
-  }
-
-  function stopAmbience() {
-    if (!audioCtx || !masterGain) return;
-    try {
-      masterGain.gain.setValueAtTime(masterGain.gain.value, audioCtx.currentTime);
-      masterGain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.2);
-
-      setTimeout(() => {
-        oscNodes.forEach(osc => osc.stop());
-        oscNodes = [];
-        if (audioCtx) {
-          audioCtx.close();
-          audioCtx = null;
-        }
-      }, 1300);
-
-      isPlaying = false;
-      ambienceBtn.classList.remove('playing');
-      if (ambienceState) ambienceState.textContent = '432 HZ';
-    } catch (e) {
-      console.warn('Error stopping ambience:', e);
-    }
-  }
-
-  ambienceBtn.addEventListener('click', () => {
-    if (isPlaying) {
-      stopAmbience();
-    } else {
-      startAmbience();
-    }
   });
 }
