@@ -202,7 +202,7 @@ body {
 
 .nav-subtitle {
   font-family: var(--font-sans-precision);
-  font-size: 0.68rem;
+  font-size: 0.50rem;
   letter-spacing: 0.22em;
   color: var(--color-text-muted);
   font-weight: 600;
@@ -246,6 +246,14 @@ body {
   display: flex;
   align-items: center;
   gap: 0.35rem;
+}
+@media (max-width: 500px) {
+  .nav-actions {
+    flex-wrap: wrap;
+    span{
+      display: none;
+    }
+  }
 }
 
 .nav-contact-link {
